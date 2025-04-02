@@ -64,10 +64,10 @@ public class Datastore {
         }
     }
 
-    private func deleteFile(dir: String, fName: String) -> DatastoreError? {
+    public static func deleteFile(dir: Directory, fName: String) -> DatastoreError? {
         let fileManager = FileManager.default
         let docDir = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let dataDir = docDir.appendingPathComponent(dir)
+        let dataDir = docDir.appendingPathComponent(dir.GetPath())
         let filePath = dataDir.appendingPathComponent(fName).path
 
         do {
@@ -82,7 +82,7 @@ public class Datastore {
         }
     }
     
-    public func jsonEncode<T: Encodable>(_ object: T) -> Result<String> {
+    public static func jsonEncode<T: Encodable>(_ object: T) -> Result<String> {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
         do {
@@ -99,7 +99,7 @@ public class Datastore {
         }
     }
 
-    public func jsonDecode<T: Decodable>(_ jsonData: Data, as type: T.Type) -> Result<T> {
+    public static func jsonDecode<T: Decodable>(_ jsonData: Data, as type: T.Type) -> Result<T> {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
 
