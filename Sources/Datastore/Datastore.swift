@@ -124,7 +124,7 @@ func readFromDisk<T: Decodable>(dir: String, fName: String, as type: T.Type) -> 
     let fUrl = dataDir.appendingPathComponent(fName)
     do {
         let data = try Data(contentsOf: fUrl)
-        return jsonDecode(data, as: type)
+        return Datastore.jsonDecode(data, as: type)
     } catch {
         return Result(
             status: .ERROR, err: DatastoreError(message: "Error reading \(fName): \(error)"),
