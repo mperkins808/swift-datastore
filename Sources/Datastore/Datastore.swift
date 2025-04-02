@@ -13,9 +13,9 @@ public struct DatastoreError: Error {
 }
 
 public struct Result<T: Codable> {
-    var status: Status
-    var err: DatastoreError?
-    var obj: T?
+    public var status: Status
+    public var err: DatastoreError?
+    public var obj: T?
 }
 
 public struct Directory {
