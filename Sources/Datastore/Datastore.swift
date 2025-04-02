@@ -1,25 +1,24 @@
 // The Swift Programming Language
 // https://docs.swift.org/swift-book
 
-import Combine
 import Foundation
 
-enum Status {
+public enum Status {
     case OK
     case ERROR
 }
 
-struct DatastoreError: Error {
+public struct DatastoreError: Error {
     let message: String
 }
 
-struct Result<T: Codable> {
+public struct Result<T: Codable> {
     var status: Status
     var err: DatastoreError?
     var obj: T?
 }
 
-struct Directory {
+public struct Directory {
     var name: String
 
     func GetPath() -> String {
@@ -29,20 +28,20 @@ struct Directory {
     }
 }
 
-class DataStore {
+public class DataStore {
 
-    static func GetDirectory(_ name: String) -> Directory {
+    public static func GetDirectory(_ name: String) -> Directory {
         return Directory(name: name)
     }
 
-    static func SaveGeneric<T: Encodable>(_ dir: Directory, fname: String, data: T) -> Result<T> {
+    public static func SaveGeneric<T: Encodable>(_ dir: Directory, fname: String, data: T) -> Result<T> {
         if let err = writeToDisk(dir: dir.GetPath(), fName: fname, data: data) {
             return Result(status: .ERROR, err: err, obj: nil)
         }
         return Result(status: .OK, err: nil, obj: data)
     }
 
-    static func LoadGeneric<T: Decodable>(_ dir: Directory, fname: String, as type: T.Type)
+    public static func LoadGeneric<T: Decodable>(_ dir: Directory, fname: String, as type: T.Type)
         -> Result<T>
     {
         return readFromDisk(dir: dir.GetPath(), fName: fname, as: type)
