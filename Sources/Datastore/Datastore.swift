@@ -81,39 +81,41 @@ public class Datastore {
             return DatastoreError(message: ("Error deleting file at path \(filePath): \(error)"))
         }
     }
-
-}
-
-public func jsonEncode<T: Encodable>(_ object: T) -> Result<String> {
-    let encoder = JSONEncoder()
-    encoder.dateEncodingStrategy = .iso8601
-    do {
-        let jsonData = try encoder.encode(object)
-        if let str = String(data: jsonData, encoding: .utf8) {
-            return Result(status: .OK, err: nil, obj: str)
+    
+    public func jsonEncode<T: Encodable>(_ object: T) -> Result<String> {
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        do {
+            let jsonData = try encoder.encode(object)
+            if let str = String(data: jsonData, encoding: .utf8) {
+                return Result(status: .OK, err: nil, obj: str)
+            }
+            return Result(
+                status: .ERROR, err: DatastoreError(message: "Failed to encode object"), obj: nil)
+        } catch {
+            return Result(
+                status: .ERROR, err: DatastoreError(message: "Failed to encode object: \(error)"),
+                obj: nil)
         }
-        return Result(
-            status: .ERROR, err: DatastoreError(message: "Failed to encode object"), obj: nil)
-    } catch {
-        return Result(
-            status: .ERROR, err: DatastoreError(message: "Failed to encode object: \(error)"),
-            obj: nil)
     }
+
+    public func jsonDecode<T: Decodable>(_ jsonData: Data, as type: T.Type) -> Result<T> {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+
+        do {
+            let decodedObject = try decoder.decode(T.self, from: jsonData)
+            return Result(status: .OK, err: nil, obj: decodedObject)
+        } catch {
+            return Result(
+                status: .ERROR, err: DatastoreError(message: "Failed to decode JSON: \(error)"),
+                obj: nil)
+        }
+    }
+
 }
 
-public func jsonDecode<T: Decodable>(_ jsonData: Data, as type: T.Type) -> Result<T> {
-    let decoder = JSONDecoder()
-    decoder.dateDecodingStrategy = .iso8601
 
-    do {
-        let decodedObject = try decoder.decode(T.self, from: jsonData)
-        return Result(status: .OK, err: nil, obj: decodedObject)
-    } catch {
-        return Result(
-            status: .ERROR, err: DatastoreError(message: "Failed to decode JSON: \(error)"),
-            obj: nil)
-    }
-}
 
 func readFromDisk<T: Decodable>(dir: String, fName: String, as type: T.Type) -> Result<T> {
     let fManager = FileManager.default
