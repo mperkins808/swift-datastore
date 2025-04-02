@@ -28,7 +28,7 @@ public struct Directory {
     }
 }
 
-public class DataStore {
+public class Datastore {
 
     public static func GetDirectory(_ name: String) -> Directory {
         return Directory(name: name)
@@ -51,7 +51,7 @@ public class DataStore {
         -> DatastoreError?
     {
         do {
-            let url = try Datastore.createDirectoryIfNeeded(name: dir)
+            let url = try createDirectoryIfNeeded(name: dir)
             let fUrl = url.appendingPathComponent(fName)
 
             // Encode data into JSON format before writing
@@ -84,7 +84,7 @@ public class DataStore {
 
 }
 
-func jsonEncode<T: Encodable>(_ object: T) -> Result<String> {
+public func jsonEncode<T: Encodable>(_ object: T) -> Result<String> {
     let encoder = JSONEncoder()
     encoder.dateEncodingStrategy = .iso8601
     do {
@@ -101,7 +101,7 @@ func jsonEncode<T: Encodable>(_ object: T) -> Result<String> {
     }
 }
 
-func jsonDecode<T: Decodable>(_ jsonData: Data, as type: T.Type) -> Result<T> {
+public func jsonDecode<T: Decodable>(_ jsonData: Data, as type: T.Type) -> Result<T> {
     let decoder = JSONDecoder()
     decoder.dateDecodingStrategy = .iso8601
 
