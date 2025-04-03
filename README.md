@@ -33,7 +33,7 @@ True one liner reading of JSON data.
     }
 
     // or if you want to read the error 
-    let result = Datastore.jsonDecode(Data, as: Table.self) 
+    let result = Datastore.jsonDecode(Data, as: SomeData.self) 
     guard let data = result.obj else {
         print(result.err!)
     }
