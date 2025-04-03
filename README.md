@@ -28,7 +28,9 @@ Create a struct that conforms to Codable
 True one liner reading of JSON data.
 
 ```swift
-    if let data = Datastore.jsonDecode(Data, as: Table.self).obj
+    if let data = Datastore.jsonDecode(Data, as: Table.self).obj {
+        // ...
+    }
 
     // or if you want to read the error 
     let result = Datastore.jsonDecode(Data, as: Table.self) 
