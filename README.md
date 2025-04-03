@@ -25,7 +25,19 @@ Create a struct that conforms to Codable
     }
 ```
 
-Save it to disk. If the directory doesn't exist it will be created.
+True one liner reading of JSON data.
+
+```swift
+    if let data = Datastore.jsonDecode(Data, as: Table.self).obj
+
+    // or if you want to read the error 
+    let result = Datastore.jsonDecode(Data, as: Table.self) 
+    guard let data = result.obj else {
+        print(result.err!)
+    }
+```
+
+Save data to disk. If the directory doesn't exist it will be created.
 
 ```swift
     func Save() {
@@ -38,7 +50,7 @@ Save it to disk. If the directory doesn't exist it will be created.
         case .OK:
             print("file saved")
         }
-        
+
         // or 
         if let err = result.error {
             // ... 
