@@ -22,9 +22,7 @@ public struct Directory {
     var name: String
 
     func GetPath() -> String {
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        let docDir = paths[0]
-        return docDir.appendingPathComponent(self.name).path
+        return self.name
     }
 }
 
@@ -34,7 +32,9 @@ public class Datastore {
         return Directory(name: name)
     }
 
-    public static func SaveGeneric<T: Encodable>(_ dir: Directory, fname: String, data: T) -> Result<T> {
+    public static func SaveGeneric<T: Encodable>(_ dir: Directory, fname: String, data: T)
+        -> Result<T>
+    {
         if let err = writeToDisk(dir: dir.GetPath(), fName: fname, data: data) {
             return Result(status: .ERROR, err: err, obj: nil)
         }
@@ -81,7 +81,7 @@ public class Datastore {
             return DatastoreError(message: ("Error deleting file at path \(filePath): \(error)"))
         }
     }
-    
+
     public static func jsonEncode<T: Encodable>(_ object: T) -> Result<String> {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -114,8 +114,6 @@ public class Datastore {
     }
 
 }
-
-
 
 func readFromDisk<T: Decodable>(dir: String, fName: String, as type: T.Type) -> Result<T> {
     let fManager = FileManager.default
